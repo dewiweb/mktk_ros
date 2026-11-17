@@ -86,9 +86,10 @@ inspection).
 ## Testing
 
 - Primary: deploy.sh against the RB5009, manual click-through per page.
-- Dev loop without a router: point a reverse proxy (e.g. `caddy`) at the
-  router, or serve the folder locally with a stub `/rest` mock
-  (`scripts/mock-rest.py` — to be written in M1).
+- Dev loop without a router: `python3 scripts/mock-rest.py [port]` serves
+  the static files plus a fake `/rest/*` (realistic RB5009 data, live
+  jittered `monitor-traffic`, Basic-auth check). Any credentials work;
+  `bad`/`bad` returns 401.
 - Browser support: current Firefox/Chrome/Safari (AV operators use iPads too —
   keep touch targets ≥ 32 px).
 

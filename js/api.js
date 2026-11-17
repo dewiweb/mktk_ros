@@ -44,6 +44,7 @@ const Api = (() => {
   return {
     get: (path) => request('GET', path),
     post: (path, body) => request('POST', path, body ?? {}),
+    patch: (path, body) => request('PATCH', path, body ?? {}),
     put: (path, body) => request('PUT', path, body ?? {}),
     del: (path) => request('DELETE', path),
     hasCreds: () => !!creds(),
@@ -77,8 +78,10 @@ const fmt = {
     if (n >= 1e3) return (n / 1e3).toFixed(1) + ' Kbps';
     return n.toFixed(0) + ' bps';
   },
-  uptime(sec) {
-    sec = parseInt(sec, 10);
+  uptime(v) {
+    // RouterOS returns strings like "2d20h12m20s" — pass those through.
+    if (typeof v === 'string' && /[dhms]/.test(v)) return v;
+    const sec = parseInt(v, 10);
     if (!Number.isFinite(sec)) return '—';
     const d = Math.floor(sec / 86400), h = Math.floor(sec / 3600) % 24,
           m = Math.floor(sec / 60) % 60, s = sec % 60;
